@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item9" object-name="Workflow:name=generic" id="41f2fc74-08cf-41a3-ac7b-6e8b3986f936" editor-version="2.0" version="0.2.0" api-version="6.0.0" allowed-operations="vef" restartMode="1" resumeFromFailedMode="0">
+    <display-name>Loop for Create zone vra8</display-name>
+    <description>Creates a resource pool with the default CPU and memory allocation values. 
+To create a resource pool in a cluster, the cluster must have VMware DRS enabled.</description>
+    <ref-types>(VC:ResourcePool)</ref-types>
+    <position y="40.0" x="120.0"/>
+    <input>
+        <param name="count" type="string"/>
+    </input>
+    <output>
+        <param name="zone" type="VRA:Zone">
+            <description>Cloud Zone Object</description>
+        </param>
+    </output>
+    <attrib name="counter" type="number">
+        <value encoded="n">0.0</value>
+    </attrib>
+    <attrib name="prefix" type="string">
+        <value encoded="n">CloudZone-</value>
+    </attrib>
+    <attrib name="name" type="string">
+        <value encoded="n"></value>
+    </attrib>
+    <workflow-item name="item1" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="20.0" x="580.0"/>
+    </workflow-item>
+    <workflow-item name="item4" out-name="item5" type="task" prototype-id="increase-counter" content-mode="x" comparator="0">
+        <display-name>Increase counter</display-name>
+        <script encoded="false">//Auto-generated script
+counter = counter + 1;</script>
+        <in-binding>
+            <bind name="counter" type="number" export-name="counter">
+                <description>Item to increase</description>
+            </bind>
+        </in-binding>
+        <out-binding>
+            <bind name="counter" type="number" export-name="counter">
+                <description>Increased item</description>
+            </bind>
+        </out-binding>
+        <description>Increment a counter by one.</description>
+        <position y="80.0" x="380.0"/>
+    </workflow-item>
+    <workflow-item name="item5" out-name="item10" type="task" comparator="0">
+        <display-name>Int name</display-name>
+        <script encoded="false">name = prefix + counter ;
+System.log("Resourcepool name : " + name);</script>
+        <in-binding>
+            <bind name="prefix" type="string" export-name="prefix"/>
+            <bind name="counter" type="number" export-name="counter"/>
+            <bind name="name" type="string" export-name="name"/>
+        </in-binding>
+        <out-binding>
+            <bind name="name" type="string" export-name="name"/>
+        </out-binding>
+        <description>Simple task with custom script capability.</description>
+        <position y="130.0" x="240.0"/>
+    </workflow-item>
+    <workflow-item name="item7" out-name="item1" type="task" comparator="0">
+        <display-name>Scriptable task</display-name>
+        <script encoded="false">System.log("Done.");</script>
+        <in-binding/>
+        <out-binding/>
+        <description>Simple task with custom script capability.</description>
+        <position y="30.0" x="380.0"/>
+    </workflow-item>
+    <workflow-item name="item9" out-name="item7" alt-out-name="item4" type="custom-condition" comparator="0">
+        <display-name>Decision</display-name>
+        <script encoded="false">if (count &gt; counter)
+	return false;
+else
+	return true;</script>
+        <in-binding>
+            <bind name="count" type="string" export-name="count"/>
+            <bind name="counter" type="number" export-name="counter"/>
+        </in-binding>
+        <out-binding/>
+        <description>Custom decision based on a custom script.</description>
+        <position y="20.0" x="240.0"/>
+    </workflow-item>
+    <workflow-item name="item10" out-name="item9" type="link" linked-workflow-id="984aac6a-1f8f-4a6c-9f3a-beb4a3477b85" comparator="0">
+        <display-name>Copy of Create Cloud Zone</display-name>
+        <script encoded="false"></script>
+        <in-binding>
+            <bind name="name" type="string" export-name="name">
+                <description>Cloud Zone Name</description>
+            </bind>
+        </in-binding>
+        <out-binding>
+            <bind name="zone" type="VRA:Zone" export-name="zone">
+                <description>Cloud Zone Object</description>
+            </bind>
+        </out-binding>
+        <description> </description>
+        <position y="80.0" x="140.0"/>
+    </workflow-item>
+</ns2:workflow>

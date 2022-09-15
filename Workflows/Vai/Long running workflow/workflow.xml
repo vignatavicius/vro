@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:workflow xmlns:ns2="http://vmware.com/vco/workflow" root-name="item1" object-name="workflow:name=generic" id="ea82d19d-ed6b-46d3-a419-0f3dd2f54165" editor-version="1.6" version="0.0.0" api-version="6.0.0" allowed-operations="vfe" restartMode="1" resumeFromFailedMode="0">
+    <display-name>Long running workflow</display-name>
+    <position y="50.0" x="100.0"/>
+    <input>
+        <param name="iterations" type="number">
+            <description>How many times to run the loop.</description>
+        </param>
+    </input>
+    <output/>
+    <attrib name="sleepTime" type="number">
+        <value encoded="n">2.0</value>
+        <description>Time to sleep in seconds</description>
+    </attrib>
+    <attrib name="counter" type="number">
+        <value encoded="n">0.0</value>
+        <description>counter incremented</description>
+    </attrib>
+    <workflow-item name="item1" out-name="item4" alt-out-name="item2" type="custom-condition" comparator="0">
+        <display-name>Custom decision</display-name>
+        <script encoded="false">return (counter &lt; iterations); </script>
+        <in-binding>
+            <bind name="counter" type="number" export-name="counter"/>
+            <bind name="iterations" type="number" export-name="iterations"/>
+        </in-binding>
+        <out-binding/>
+        <position y="45.40909090909091" x="204.5"/>
+    </workflow-item>
+    <workflow-item name="item2" type="end" end-mode="0" comparator="0">
+        <in-binding/>
+        <out-binding/>
+        <position y="109.04545454545453" x="244.5"/>
+    </workflow-item>
+    <workflow-item name="item3" out-name="item5" type="task" comparator="0">
+        <display-name>Display message</display-name>
+        <script encoded="false">System.log("Counter: ######"+counter);
+</script>
+        <in-binding>
+            <bind name="counter" type="number" export-name="counter"/>
+        </in-binding>
+        <out-binding/>
+        <position y="119.04545454545453" x="544.5"/>
+    </workflow-item>
+    <workflow-item name="item4" out-name="item3" type="task" prototype-id="increase-counter" content-mode="x" comparator="0">
+        <display-name>Increase counter</display-name>
+        <script encoded="false">//Auto-generated script
+counter = counter+1;</script>
+        <in-binding>
+            <bind name="counter" type="number" export-name="counter">
+                <description>counter to increment</description>
+            </bind>
+        </in-binding>
+        <out-binding>
+            <bind name="counter" type="number" export-name="counter">
+                <description>counter incremented</description>
+            </bind>
+        </out-binding>
+        <description>Increment a counter by one</description>
+        <position y="55.40909090909091" x="544.5"/>
+    </workflow-item>
+    <workflow-item name="item5" out-name="item1" type="task" prototype-id="sleep" content-mode="x" comparator="0">
+        <display-name>Sleep</display-name>
+        <script encoded="false">//Auto-generated script
+if ( sleepTime != null )  {
+	System.sleep(sleepTime*1000);
+}
+else  {
+	throw "'sleepTime' is NULL";
+}
+</script>
+        <in-binding>
+            <bind name="sleepTime" type="number" export-name="sleepTime">
+                <description>Time to sleep in seconds</description>
+            </bind>
+        </in-binding>
+        <out-binding/>
+        <description>Sleep a given number of seconds</description>
+        <position y="119.04545454545453" x="404.5"/>
+    </workflow-item>
+</ns2:workflow>
